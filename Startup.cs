@@ -44,10 +44,10 @@ namespace BetterDocs
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
+            //app.UseHttpsRedirection(); Todo auth
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors("CorsPolicy"); // Cors policy has to be used before the authorization and endpoints
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
