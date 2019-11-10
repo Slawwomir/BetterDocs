@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BetterDocs.Hubs;
 
 namespace BetterDocs
 {
@@ -18,6 +19,7 @@ namespace BetterDocs
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
                 builder
                     .WithOrigins("http://localhost:3000")
@@ -47,7 +49,11 @@ namespace BetterDocs
             app.UseRouting();
             app.UseCors("CorsPolicy"); // Cors policy has to be used before the authorization and endpoints
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapRazorPages());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<DocumentHub>("/hub");
+                endpoints.MapRazorPages();
+            });
         }
     }
 }
